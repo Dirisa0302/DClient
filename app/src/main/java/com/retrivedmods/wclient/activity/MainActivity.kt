@@ -25,7 +25,7 @@ import androidx.lifecycle.lifecycleScope
 import com.retrivedmods.wclient.game.ModuleManager
 import com.retrivedmods.wclient.navigation.Navigation
 import com.retrivedmods.wclient.ui.component.LoadingScreen
-import com.retrivedmods.wclient.ui.theme.WClientTheme
+import com.retrivedmods.wclient.ui.theme.DClientTheme
 import com.retrivedmods.wclient.util.SoundUtil
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -59,7 +59,7 @@ class MainActivity : ComponentActivity() {
         requestStoragePermissions()
 
         setContent {
-            WClientTheme {
+            DClientTheme {
                 var showLoading by remember { mutableStateOf(true) }
 
                 // Màn hình load giả lập ngắn gọn, bỏ qua toàn bộ check key/whitelist

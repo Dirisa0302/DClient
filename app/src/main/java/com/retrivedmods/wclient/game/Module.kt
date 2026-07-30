@@ -3,10 +3,6 @@ package com.retrivedmods.wclient.game
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import com.retrivedmods.wclient.overlay.gui.classic.OverlayShortcutButton
-import com.retrivedmods.wclient.util.translatedSelf
-import com.retrivedmods.wclient.util.SoundUtil
-import com.retrivedmods.wclient.game.module.misc.ToggleSoundModule
 import kotlinx.serialization.json.*
 
 abstract class Module(
@@ -37,39 +33,21 @@ abstract class Module(
     var shortcutX = 0
     var shortcutY = 100
 
-    val overlayShortcutButton by lazy { OverlayShortcutButton(this) }
+    
 
     override val values: MutableList<Value<*>> = ArrayList()
 
 
 
     open fun onEnabled() {
-        sendToggleMessage(true)
+    sendToggleMessage(true)
+    SoundUtil.playEnable()
+}
 
-        if (shouldPlayToggleSound()) {
-            SoundUtil.playEnable()
-        }
-    }
-
-    open fun onDisabled() {
-        sendToggleMessage(false)
-
-        if (shouldPlayToggleSound()) {
-            SoundUtil.playDisable()
-        }
-    }
-
-    private fun shouldPlayToggleSound(): Boolean {
-        if (this is ToggleSoundModule) return false
-
-        val toggleSoundModule = ModuleManager.modules
-            .firstOrNull { it is ToggleSoundModule } as? ToggleSoundModule
-
-        return toggleSoundModule?.isEnabled == true
-    }
-
-
-
+open fun onDisabled() {
+    sendToggleMessage(false)
+    SoundUtil.playDisable()
+}
     open fun toJson() = buildJsonObject {
         put("state", isEnabled)
         put("values", buildJsonObject {
