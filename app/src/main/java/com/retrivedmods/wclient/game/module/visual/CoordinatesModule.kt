@@ -41,7 +41,6 @@ class CoordinatesModule : Module("Coordinates", ModuleCategory.Visual) {
         super.onEnabled()
         try {
             if (isSessionCreated) {
-                CoordinatesOverlay.Companion.setOverlayEnabled(true)
                 updateSettings()
                 startUpdateLoop()
             }
@@ -51,17 +50,14 @@ class CoordinatesModule : Module("Coordinates", ModuleCategory.Visual) {
     }
 
     override fun onDisabled() {
-        super.onDisabled()
-        if (isSessionCreated) {
-            CoordinatesOverlay.Companion.setOverlayEnabled(false)
-        }
-    }
+    super.onDisabled()
+}
 
     override fun onDisconnect(reason: String) {
-        if (isSessionCreated) {
-            CoordinatesOverlay.Companion.setOverlayEnabled(false)
-        }
+    if (isSessionCreated) {
+
     }
+}
 
     private fun updateSettings() {
         CoordinatesOverlay.Companion.setShowCoordinates(showCoordinates)
@@ -69,7 +65,6 @@ class CoordinatesModule : Module("Coordinates", ModuleCategory.Visual) {
         CoordinatesOverlay.Companion.setShowDimension(showDimension)
         CoordinatesOverlay.Companion.setShowSpeed(showSpeed)
         CoordinatesOverlay.Companion.setShowNetherCoords(showNetherCoords)
-        CoordinatesOverlay.Companion.setPosition(position)
         CoordinatesOverlay.Companion.setFontSize(fontSize)
         CoordinatesOverlay.Companion.setColorMode(colorMode)
         CoordinatesOverlay.Companion.setShowBackground(showBackground)

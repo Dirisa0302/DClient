@@ -24,8 +24,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import com.retrivedmods.wclient.R
 import com.retrivedmods.wclient.game.ModuleManager
-import com.retrivedmods.wclient.overlay.OverlayManager
-import com.retrivedmods.wclient.ui.component.WGlassCard
 import com.retrivedmods.wclient.ui.theme.WColors
 import com.retrivedmods.wclient.util.LocalSnackbarHostState
 import com.retrivedmods.wclient.util.SnackbarHostStateScope

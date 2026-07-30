@@ -1,13 +1,6 @@
 package com.retrivedmods.wclient.overlay.hud
-
-import android.annotation.SuppressLint
-import com.retrivedmods.wclient.overlay.OverlayWindow
-import com.retrivedmods.wclient.overlay.OverlayManager
-import android.view.Gravity
-import android.view.WindowManager
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,7 +22,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -38,31 +30,12 @@ import com.retrivedmods.wclient.ui.theme.WColors
 import kotlinx.coroutines.delay
 import kotlin.math.abs
 
-class CoordinatesOverlay : OverlayWindow() {
-
-    private val _layoutParams by lazy {
-        super.layoutParams.apply {
-            flags = flags or
-                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
-                    WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or
-                    WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
-            width = WindowManager.LayoutParams.WRAP_CONTENT
-            height = WindowManager.LayoutParams.WRAP_CONTENT
-            gravity = Gravity.TOP or Gravity.START
-            x = 20
-            y = 120
-        }
-    }
-
-    override val layoutParams: WindowManager.LayoutParams
-        get() = _layoutParams
-
+class CoordinatesOverlay {
     private var showCoordinates by mutableStateOf(true)
     private var showDirection by mutableStateOf(true)
     private var showDimension by mutableStateOf(true)
     private var showSpeed by mutableStateOf(false)
     private var showNetherCoords by mutableStateOf(true)
-    private var position by mutableStateOf(CoordinatesModule.Position.TOP_LEFT)
     private var fontSize by mutableIntStateOf(14)
     private var colorMode by mutableStateOf(CoordinatesModule.ColorMode.STATIC)
     private var showBackground by mutableStateOf(true)
@@ -79,28 +52,9 @@ class CoordinatesOverlay : OverlayWindow() {
 
     companion object {
         val overlayInstance by lazy { CoordinatesOverlay() }
-        private var shouldShowOverlay = false
+        
 
-        fun showOverlay() {
-            if (shouldShowOverlay) {
-                try {
-                    OverlayManager.showOverlayWindow(overlayInstance)
-                } catch (e: Exception) {}
-            }
-        }
-
-        fun dismissOverlay() {
-            try {
-                OverlayManager.dismissOverlayWindow(overlayInstance)
-            } catch (e: Exception) {}
-        }
-
-        fun setOverlayEnabled(enabled: Boolean) {
-            shouldShowOverlay = enabled
-            if (enabled) showOverlay() else dismissOverlay()
-        }
-
-        fun isOverlayEnabled(): Boolean = shouldShowOverlay
+        
 
         fun setShowCoordinates(show: Boolean) {
             overlayInstance.showCoordinates = show
@@ -122,10 +76,6 @@ class CoordinatesOverlay : OverlayWindow() {
             overlayInstance.showNetherCoords = show
         }
 
-        fun setPosition(pos: CoordinatesModule.Position) {
-            overlayInstance.position = pos
-            overlayInstance.updateLayoutParams()
-        }
 
         fun setFontSize(size: Int) {
             overlayInstance.fontSize = size
@@ -176,27 +126,10 @@ class CoordinatesOverlay : OverlayWindow() {
         }
     }
 
-    private fun updateLayoutParams() {
-        val gravity = when (position) {
-            CoordinatesModule.Position.TOP_LEFT -> Gravity.TOP or Gravity.START
-            CoordinatesModule.Position.TOP_RIGHT -> Gravity.TOP or Gravity.END
-            CoordinatesModule.Position.BOTTOM_LEFT -> Gravity.BOTTOM or Gravity.START
-            CoordinatesModule.Position.BOTTOM_RIGHT -> Gravity.BOTTOM or Gravity.END
-            CoordinatesModule.Position.CENTER_LEFT -> Gravity.CENTER_VERTICAL or Gravity.START
-            CoordinatesModule.Position.CENTER_RIGHT -> Gravity.CENTER_VERTICAL or Gravity.END
-        }
-        
-        _layoutParams.gravity = gravity
-        
-        try {
-            windowManager.updateViewLayout(composeView, _layoutParams)
-        } catch (e: Exception) {}
-    }
+    
 
-    @SuppressLint("UnrememberedMutableState")
-    @Composable
-    override fun Content() {
-        if (!isOverlayEnabled()) return
+@Composable
+fun Content() {
 
         var rainbowOffset by mutableFloatStateOf(0f)
 
@@ -211,52 +144,45 @@ class CoordinatesOverlay : OverlayWindow() {
         val textColor = getTextColor(rainbowOffset)
 
         Box(
-            modifier = Modifier
-                .pointerInput(Unit) {
-                    detectDragGestures { _, drag ->
-                        _layoutParams.x = (_layoutParams.x + drag.x.toInt()).coerceAtLeast(0)
-                        _layoutParams.y = (_layoutParams.y + drag.y.toInt()).coerceAtLeast(0)
-                        try {
-                            windowManager.updateViewLayout(composeView, _layoutParams)
-                        } catch (e: Exception) {}
-                    }
-                }
-                .let { modifier ->
-                    if (showBackground) {
-                        modifier
-                            .background(
-                                WColors.Surface.copy(alpha = backgroundOpacity),
-                                RoundedCornerShape(8.dp)
-                            )
-                            .clip(RoundedCornerShape(8.dp))
-                    } else modifier
-                }
-                .let { modifier ->
-                    if (showBorder) {
-                        modifier.border(1.dp, WColors.Border, RoundedCornerShape(8.dp))
-                    } else modifier
-                }
-                .padding(8.dp)
-        ) {
-            if (compactMode) {
-                CompactCoordinatesDisplay(textColor)
-            } else {
-                DetailedCoordinatesDisplay(textColor)
-            }
+    modifier = Modifier
+        .padding(8.dp)
+        .let { modifier ->
+            if (showBackground) {
+                modifier
+                    .background(
+                        WColors.Surface.copy(alpha = backgroundOpacity),
+                        RoundedCornerShape(8.dp)
+                    )
+                    .clip(RoundedCornerShape(8.dp))
+            } else modifier
         }
+        .let { modifier ->
+            if (showBorder) {
+                modifier.border(
+                    1.dp,
+                    WColors.Border,
+                    RoundedCornerShape(8.dp)
+                )
+            } else modifier
+        }
+        .padding(8.dp)
+) {
+    if (compactMode) {
+        CompactCoordinatesDisplay(textColor)
+    } else {
+        DetailedCoordinatesDisplay(textColor)
     }
-
+}
+}
     @Composable
-    private fun CompactCoordinatesDisplay(textColor: Color) {
-        val coordText = buildCompactCoordinatesText()
-        Text(
-            text = coordText,
-            color = textColor,
-            fontSize = fontSize.sp,
-            fontWeight = FontWeight.Medium
-        )
-    }
-
+private fun CompactCoordinatesDisplay(textColor: Color) {
+    Text(
+        text = buildCompactCoordinatesText(),
+        color = textColor,
+        fontSize = fontSize.sp,
+        fontWeight = FontWeight.Medium
+    )
+}
     @Composable
     private fun DetailedCoordinatesDisplay(textColor: Color) {
         Column(

@@ -41,12 +41,10 @@ abstract class Module(
 
     open fun onEnabled() {
     sendToggleMessage(true)
-    SoundUtil.playEnable()
 }
 
 open fun onDisabled() {
     sendToggleMessage(false)
-    SoundUtil.playDisable()
 }
     open fun toJson() = buildJsonObject {
         put("state", isEnabled)
@@ -89,9 +87,9 @@ open fun onDisabled() {
     private fun sendToggleMessage(enabled: Boolean) {
         if (!isSessionCreated) return
 
-        val stateText = if (enabled) "enabled".translatedSelf else "disabled".translatedSelf
+        val stateText = if (enabled) "enabled" else "disabled"
         val status = (if (enabled) "§a" else "§c") + stateText
-        val moduleName = name.translatedSelf
+        val moduleName = name
 
         session.displayClientMessage(
             "§l§c[WClient] §r§7$moduleName §8» $status"

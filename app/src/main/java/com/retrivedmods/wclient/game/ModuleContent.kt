@@ -44,8 +44,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
 import com.retrivedmods.wclient.R
-import com.retrivedmods.wclient.overlay.OverlayManager
-import com.retrivedmods.wclient.util.translatedSelf
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlin.math.roundToInt
