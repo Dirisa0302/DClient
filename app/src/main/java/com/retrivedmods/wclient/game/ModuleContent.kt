@@ -143,7 +143,7 @@ private fun ModuleCard(module: Module) {
                 modifier = Modifier.padding(16.dp)
             ) {
                 Text(
-                    module.name
+                    module.name,
                     style = MaterialTheme.typography.titleMedium,
                     color = if (module.isEnabled) AccentPrimary else TextPrimary
                 )
