@@ -143,7 +143,7 @@ private fun ModuleCard(module: Module) {
                 modifier = Modifier.padding(16.dp)
             ) {
                 Text(
-                    module.name.translatedSelf,
+                    module.name
                     style = MaterialTheme.typography.titleMedium,
                     color = if (module.isEnabled) AccentPrimary else TextPrimary
                 )
@@ -186,7 +186,7 @@ private fun ModuleCard(module: Module) {
 private fun ChoiceValueContent(value: ListValue) {
     Column(Modifier.padding(start = 16.dp, end = 16.dp, bottom = 8.dp)) {
         Text(
-            value.name.translatedSelf,
+            value.name,
             style = MaterialTheme.typography.bodyMedium,
             color = TextSecondary,
             modifier = Modifier.padding(bottom = 8.dp)
@@ -196,7 +196,7 @@ private fun ChoiceValueContent(value: ListValue) {
                 ElevatedFilterChip(
                     selected = value.value == item,
                     onClick = { if (value.value != item) value.value = item },
-                    label = { Text(item.name.translatedSelf) },
+                    label = { Text(item.name) },
                     modifier = Modifier.height(32.dp),
                     enabled = true,
                     colors = FilterChipDefaults.filterChipColors(
@@ -227,7 +227,7 @@ private fun FloatValueContent(value: FloatValue) {
     Column(Modifier.padding(start = 16.dp, end = 16.dp, bottom = 8.dp)) {
         Row(modifier = Modifier.padding(bottom = 4.dp)) {
             Text(
-                value.name.translatedSelf,
+                value.name,
                 style = MaterialTheme.typography.bodyMedium,
                 color = TextSecondary
             )
@@ -276,7 +276,7 @@ private fun IntValueContent(value: IntValue) {
     Column(Modifier.padding(start = 16.dp, end = 16.dp, bottom = 8.dp)) {
         Row(modifier = Modifier.padding(bottom = 4.dp)) {
             Text(
-                value.name.translatedSelf,
+                value.name,
                 style = MaterialTheme.typography.bodyMedium,
                 color = TextSecondary
             )
@@ -335,7 +335,7 @@ private fun BoolValueContent(value: BoolValue) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            value.name.translatedSelf,
+            value.name,
             style = MaterialTheme.typography.bodyMedium,
             color = TextSecondary
         )
@@ -402,7 +402,7 @@ private fun ShortcutContent(module: Module) {
 private fun <T : Enum<T>> EnumValueContent(value: EnumValue<T>) {
     Column(Modifier.padding(start = 16.dp, end = 16.dp, bottom = 8.dp)) {
         Text(
-            value.name.translatedSelf,
+            value.name,
             style = MaterialTheme.typography.bodyMedium,
             color = TextSecondary,
             modifier = Modifier.padding(bottom = 8.dp)
@@ -412,7 +412,7 @@ private fun <T : Enum<T>> EnumValueContent(value: EnumValue<T>) {
                 ElevatedFilterChip(
                     selected = value.value == option,
                     onClick = { if (value.value != option) value.value = option },
-                    label = { Text(option.name.translatedSelf) },
+                    label = { Text(option.name) },
                     modifier = Modifier.height(32.dp),
                     enabled = true,
                     colors = FilterChipDefaults.filterChipColors(
@@ -442,7 +442,7 @@ private fun <T : Enum<T>> EnumValueContent(value: EnumValue<T>) {
 private fun StringValueContent(value: StringValue) {
     Column(Modifier.padding(start = 16.dp, end = 16.dp, bottom = 8.dp)) {
         Text(
-            value.name.translatedSelf,
+            value.name,
             style = MaterialTheme.typography.bodyMedium,
             color = TextSecondary,
             modifier = Modifier.padding(bottom = 8.dp)
