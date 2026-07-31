@@ -27,6 +27,7 @@ import com.retrivedmods.wclient.game.ModuleManager
 import com.retrivedmods.wclient.ui.theme.WColors
 import com.retrivedmods.wclient.util.LocalSnackbarHostState
 import com.retrivedmods.wclient.util.SnackbarHostStateScope
+import com.retrivedmods.wclient.ui.component.WGlassCard
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
