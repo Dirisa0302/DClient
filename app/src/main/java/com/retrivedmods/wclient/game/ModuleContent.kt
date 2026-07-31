@@ -30,6 +30,7 @@ import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
+import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -88,7 +89,9 @@ fun ModuleContent(moduleCategory: ModuleCategory) {
                 contentPadding = PaddingValues(12.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                items(list.size) { i -> ModuleCard(list[i]) }
+                items(list) { module ->
+    ModuleCard(module)
+}
             }
         } else {
             Box(Modifier.fillMaxSize()) {
@@ -166,21 +169,20 @@ private fun ModuleCard(module: Module) {
             }
 
             if (module.isExpanded) {
-                values.fastForEach {
-                    when (it) {
-                        is BoolValue -> BoolValueContent(it)
-                        is FloatValue -> FloatValueContent(it)
-                        is IntValue -> IntValueContent(it)
-                        is ListValue -> ChoiceValueContent(it)
-                        is EnumValue<*> -> EnumValueContent(it)
-                        is StringValue -> StringValueContent(it)
-                    }
-                }
-                ShortcutContent(module)
-            }
+    values.fastForEach {
+        when (it) {
+            is BoolValue -> BoolValueContent(it)
+            is FloatValue -> FloatValueContent(it)
+            is IntValue -> IntValueContent(it)
+            is ListValue -> ChoiceValueContent(it)
+            is EnumValue<*> -> EnumValueContent(it)
+            is StringValue -> StringValueContent(it)
         }
     }
-}
+}   // kết thúc if
+}   // kết thúc Column
+}   // kết thúc Card
+}   // kết thúc ModuleCard
 
 @Composable
 private fun ChoiceValueContent(value: ListValue) {
@@ -356,48 +358,6 @@ private fun BoolValueContent(value: BoolValue) {
         )
     }
 }
-
-@Composable
-private fun ShortcutContent(module: Module) {
-    Row(
-        Modifier
-            .padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
-            .fillMaxWidth()
-            .toggleable(
-                value = module.isShortcutDisplayed,
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null,
-                enabled = true
-            ) {
-                module.isShortcutDisplayed = it
-                if (it) OverlayManager.showOverlayWindow(module.overlayShortcutButton)
-                else OverlayManager.dismissOverlayWindow(module.overlayShortcutButton)
-            },
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            stringResource(R.string.shortcut),
-            style = MaterialTheme.typography.bodyMedium,
-            color = TextSecondary
-        )
-        Spacer(Modifier.weight(1f))
-        Checkbox(
-            checked = module.isShortcutDisplayed,
-            onCheckedChange = null,
-            modifier = Modifier.padding(0.dp),
-            enabled = true,
-            colors = CheckboxDefaults.colors(
-                uncheckedColor = Color(0xFF353535),
-                checkedColor = AccentPrimary,
-                checkmarkColor = Color.White,
-                disabledCheckedColor = Color(0xFF353535),
-                disabledUncheckedColor = Color(0xFF252525),
-                disabledIndeterminateColor = Color(0xFF353535)
-            )
-        )
-    }
-}
-
 @Composable
 private fun <T : Enum<T>> EnumValueContent(value: EnumValue<T>) {
     Column(Modifier.padding(start = 16.dp, end = 16.dp, bottom = 8.dp)) {
